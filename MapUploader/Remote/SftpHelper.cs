@@ -94,6 +94,37 @@ namespace MapUploader.Remote
 
         }
 
+        public List<string> ListDir(string dirPath)
+        {
+            try
+            {
+                Connect();
+                var files = _sftpClient.ListDirectory(dirPath);
+                Disconnect();
+                return files.Select(o=>o.FullName).ToList();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool DeleteFile(string remotePath)
+        {
+            try
+            {
+                Connect();
+                _sftpClient.Delete(remotePath);
+                Disconnect();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
         public bool CreateDir(string remotePath)
         {
             try
