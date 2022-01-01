@@ -23,43 +23,9 @@ namespace MapUploader
 
         private void toolStripButtonCheck_Click(object sender, EventArgs e)
         {
-            string tempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "temp");
-            if (!Directory.Exists(tempPath))
-            {
-                Directory.CreateDirectory(tempPath);
-            }
+            MapForm mapForm = new MapForm();
+            mapForm.ShowDialog();
 
-            string server = GlobalContext.FtpConfig.Server;
-            string port = GlobalContext.FtpConfig.Port;
-            string user = GlobalContext.FtpConfig.User;
-            string key = GlobalContext.FtpConfig.Key;
-            string path = GlobalContext.FtpConfig.Path;
-            SftpHelper sftpHelper = new SftpHelper(server, port, user, key);
-            
-            string jsonFile = Path.Combine(tempPath, "maplist_third.json");
-            sftpHelper.DownloadFile(path + "/sourcemod/data/maplist_third.json", jsonFile);
-            
-            var ja = JArray.Parse(File.ReadAllText(jsonFile));
-            StringBuilder writer = new StringBuilder();
-            writer.AppendLine("已存在地图:");
-            foreach (var jToken in ja)
-            {
-                var data = (JObject)jToken;
-                if (data.ContainsKey("name") && data.ContainsKey("map"))
-                {
-                    StringBuilder line = new StringBuilder();
-                    
-                    line.Append(data.GetValue("name"));
-                    line.Append(":  ");
-                    line.Append(data.GetValue("map"));
-
-                    writer.AppendLine(line.ToString());
-                }
-            }
-
-            MsgForm msg = new MsgForm();
-            msg.SetMsg(writer.ToString());
-            msg.Show();
         }
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
@@ -188,13 +154,31 @@ namespace MapUploader
                 }
                 var ja = JArray.Parse(File.ReadAllText(jsonFile));
                 JObject jo = new JObject { { "map", code }, { "name", name } };
-                ja.Add(jo);
+                if (!CheckHasMap(ja, code))
+                {
+                    ja.Add(jo);
+                }
+                
                 ja[0]["count"] = ja.Children().Count() - 1;
 
                 File.WriteAllText(jsonFile, ja.ToString(Newtonsoft.Json.Formatting.Indented));
                 sftpHelper.UploadFile(path + "/sourcemod/data/maplist_third.json", jsonFile);
 
             }
+        }
+
+        private bool CheckHasMap(JArray ja, string code)
+        {
+            foreach (var jToken in ja)
+            {
+                var item = (JObject) jToken;
+                if (item["map"]?.ToString() == code)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void UploadProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -230,6 +214,8 @@ namespace MapUploader
             toolStripButtonAdd.Enabled = true;
             toolStripButtonUpload.Enabled = true;
             toolStripButtonCheck.Enabled = true;
+            MapForm mapForm = new MapForm();
+            mapForm.ShowDialog();
         }
 
         private void MainForm_Load(object sender, EventArgs e)

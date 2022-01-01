@@ -33,21 +33,22 @@ namespace MapUploader
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonUpload = new System.Windows.Forms.ToolStripButton();
-            this.dgvMain = new System.Windows.Forms.DataGridView();
             this.toolStripButtonCheck = new System.Windows.Forms.ToolStripButton();
+            this.dgvMain = new System.Windows.Forms.DataGridView();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
             // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAdd,
             this.toolStripButtonUpload,
             this.toolStripButtonCheck});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(678, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(904, 27);
             this.toolStrip1.TabIndex = 4;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -57,7 +58,7 @@ namespace MapUploader
             this.toolStripButtonAdd.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAdd.Image")));
             this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Size = new System.Drawing.Size(60, 22);
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(73, 24);
             this.toolStripButtonAdd.Text = "选择文件";
             this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
             // 
@@ -67,9 +68,19 @@ namespace MapUploader
             this.toolStripButtonUpload.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonUpload.Image")));
             this.toolStripButtonUpload.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonUpload.Name = "toolStripButtonUpload";
-            this.toolStripButtonUpload.Size = new System.Drawing.Size(36, 22);
+            this.toolStripButtonUpload.Size = new System.Drawing.Size(43, 24);
             this.toolStripButtonUpload.Text = "上传";
             this.toolStripButtonUpload.Click += new System.EventHandler(this.toolStripButtonUpload_Click);
+            // 
+            // toolStripButtonCheck
+            // 
+            this.toolStripButtonCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonCheck.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCheck.Image")));
+            this.toolStripButtonCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCheck.Name = "toolStripButtonCheck";
+            this.toolStripButtonCheck.Size = new System.Drawing.Size(73, 24);
+            this.toolStripButtonCheck.Text = "地图列表";
+            this.toolStripButtonCheck.Click += new System.EventHandler(this.toolStripButtonCheck_Click);
             // 
             // dgvMain
             // 
@@ -78,33 +89,26 @@ namespace MapUploader
             this.dgvMain.BackgroundColor = System.Drawing.Color.White;
             this.dgvMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvMain.Location = new System.Drawing.Point(0, 25);
+            this.dgvMain.Location = new System.Drawing.Point(0, 27);
+            this.dgvMain.Margin = new System.Windows.Forms.Padding(4);
             this.dgvMain.Name = "dgvMain";
             this.dgvMain.RowHeadersVisible = false;
+            this.dgvMain.RowHeadersWidth = 51;
             this.dgvMain.RowTemplate.Height = 23;
             this.dgvMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMain.Size = new System.Drawing.Size(678, 306);
+            this.dgvMain.Size = new System.Drawing.Size(904, 387);
             this.dgvMain.TabIndex = 5;
-            // 
-            // toolStripButtonCheck
-            // 
-            this.toolStripButtonCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonCheck.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCheck.Image")));
-            this.toolStripButtonCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonCheck.Name = "toolStripButtonCheck";
-            this.toolStripButtonCheck.Size = new System.Drawing.Size(84, 22);
-            this.toolStripButtonCheck.Text = "检查地图列表";
-            this.toolStripButtonCheck.Click += new System.EventHandler(this.toolStripButtonCheck_Click);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(678, 331);
+            this.ClientSize = new System.Drawing.Size(904, 414);
             this.Controls.Add(this.dgvMain);
             this.Controls.Add(this.toolStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "上传";

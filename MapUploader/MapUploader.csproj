@@ -59,15 +59,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapForm.Designer.cs">
+      <DependentUpon>MapForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MapInfoHelper.cs" />
     <Compile Include="Model\MapInfo.cs" />
     <Compile Include="Model\UploadResult.cs" />
-    <Compile Include="MsgForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MsgForm.Designer.cs">
-      <DependentUpon>MsgForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Vpk\ArchiveMD5SectionEntry.cs" />
     <Compile Include="Vpk\AsnKeyParser.cs" />
     <Compile Include="Vpk\Crc32.cs" />
@@ -88,8 +88,8 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MsgForm.resx">
-      <DependentUpon>MsgForm.cs</DependentUpon>
+    <EmbeddedResource Include="MapForm.resx">
+      <DependentUpon>MapForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
