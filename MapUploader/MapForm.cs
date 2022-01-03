@@ -115,6 +115,11 @@ namespace MapUploader
 
             if (find != null)
             {
+                if (!DeleteFile(find))
+                {
+                    MessageBox.Show("删除失败");
+                    return;
+                }
                 ja.Remove(find);
                 ja[0]["count"] = ja.Children().Count() - 1;
             }
@@ -138,6 +143,34 @@ namespace MapUploader
             sftpHelper.UploadFile(path + "/sourcemod/data/maplist_third.json", jsonFile);
 
             BindData();
+        }
+
+        private bool DeleteFile(JObject map)
+        {
+            if (!map.ContainsKey("name"))
+            {
+                return false;
+            }
+
+            var mapName = map.GetValue("name")?.ToString();
+            if (string.IsNullOrEmpty(mapName))
+            {
+                return false;
+            }
+            string server = GlobalContext.FtpConfig.Server;
+            string port = GlobalContext.FtpConfig.Port;
+            string user = GlobalContext.FtpConfig.User;
+            string key = GlobalContext.FtpConfig.Key;
+            string path = GlobalContext.FtpConfig.Path;
+            SftpHelper sftpHelper = new SftpHelper(server, port, user, key);
+            try
+            {
+                return sftpHelper.DeleteFile(path + "/workshop/" + mapName + ".vpk");
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
