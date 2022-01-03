@@ -16,8 +16,8 @@ namespace MapUploader
 {
     public partial class MapForm : Form
     {
-        private SftpHelper _sftpHelper;
-        private string _remotePath;
+        private readonly SftpHelper _sftpHelper;
+        private readonly string _remotePath;
         public MapForm()
         {
             InitializeComponent();
