@@ -16,9 +16,18 @@ namespace MapUploader
 {
     public partial class MapForm : Form
     {
+        private SftpHelper _sftpHelper;
+        private string _remotePath;
         public MapForm()
         {
             InitializeComponent();
+            string server = GlobalContext.FtpConfig.Server;
+            string port = GlobalContext.FtpConfig.Port;
+            string user = GlobalContext.FtpConfig.User;
+            string key = GlobalContext.FtpConfig.Key;
+
+            _sftpHelper = new SftpHelper(server, port, user, key);
+            _remotePath = GlobalContext.FtpConfig.Path;
         }
 
         private void MapForm_Load(object sender, EventArgs e)
@@ -81,15 +90,8 @@ namespace MapUploader
                 Directory.CreateDirectory(tempPath);
             }
 
-            string server = GlobalContext.FtpConfig.Server;
-            string port = GlobalContext.FtpConfig.Port;
-            string user = GlobalContext.FtpConfig.User;
-            string key = GlobalContext.FtpConfig.Key;
-            string path = GlobalContext.FtpConfig.Path;
-            SftpHelper sftpHelper = new SftpHelper(server, port, user, key);
-
             string jsonFile = Path.Combine(tempPath, "maplist_third.json");
-            sftpHelper.DownloadFile(path + "/sourcemod/data/maplist_third.json", jsonFile);
+            _sftpHelper.DownloadFile(_remotePath + "/sourcemod/data/maplist_third.json", jsonFile);
 
             return JArray.Parse(File.ReadAllText(jsonFile));
         }
@@ -102,27 +104,24 @@ namespace MapUploader
             var mapCode = dgvMain.Rows[e.RowIndex].Cells[4].Value?.ToString();
 
             var ja = Download();
-            JObject find = null;
-            foreach (var jToken in ja)
+            JObject find = ja.Cast<JObject>()
+                .FirstOrDefault(jo => jo.ContainsKey("map")
+                                      && jo.GetValue("map")?.ToString() == mapCode);
+
+            if (find == null)
             {
-                var jo = (JObject) jToken;
-                if (jo.ContainsKey("map") && jo.GetValue("map")?.ToString() == mapCode)
-                {
-                    find = jo;
-                    break;
-                }
+                MessageBox.Show("删除失败");
+                return;
             }
 
-            if (find != null)
+            if (!DeleteFile(find))
             {
-                if (!DeleteFile(find))
-                {
-                    MessageBox.Show("删除失败");
-                    return;
-                }
-                ja.Remove(find);
-                ja[0]["count"] = ja.Children().Count() - 1;
+                MessageBox.Show("删除失败");
+                return;
             }
+
+            ja.Remove(find);
+            ja[0]["count"] = ja.Children().Count() - 1;
 
             string tempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "temp");
             if (!Directory.Exists(tempPath))
@@ -130,17 +129,10 @@ namespace MapUploader
                 Directory.CreateDirectory(tempPath);
             }
 
-            string server = GlobalContext.FtpConfig.Server;
-            string port = GlobalContext.FtpConfig.Port;
-            string user = GlobalContext.FtpConfig.User;
-            string key = GlobalContext.FtpConfig.Key;
-            string path = GlobalContext.FtpConfig.Path;
-            SftpHelper sftpHelper = new SftpHelper(server, port, user, key);
-
             string jsonFile = Path.Combine(tempPath, "maplist_third.json");
 
             File.WriteAllText(jsonFile, ja.ToString(Newtonsoft.Json.Formatting.Indented));
-            sftpHelper.UploadFile(path + "/sourcemod/data/maplist_third.json", jsonFile);
+            _sftpHelper.UploadFile(_remotePath + "/sourcemod/data/maplist_third.json", jsonFile);
 
             BindData();
         }
@@ -157,15 +149,9 @@ namespace MapUploader
             {
                 return false;
             }
-            string server = GlobalContext.FtpConfig.Server;
-            string port = GlobalContext.FtpConfig.Port;
-            string user = GlobalContext.FtpConfig.User;
-            string key = GlobalContext.FtpConfig.Key;
-            string path = GlobalContext.FtpConfig.Path;
-            SftpHelper sftpHelper = new SftpHelper(server, port, user, key);
             try
             {
-                return sftpHelper.DeleteFile(path + "/workshop/" + mapName + ".vpk");
+                return _sftpHelper.DeleteFile(_remotePath + "/workshop/" + mapName + ".vpk");
             }
             catch
             {
